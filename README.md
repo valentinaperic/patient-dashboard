@@ -4,8 +4,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 <img width="1860" height="603" alt="image" src="https://github.com/user-attachments/assets/0697701e-972b-4a80-a393-fa31c4356342" />
 <img width="1860" height="785" alt="image" src="https://github.com/user-attachments/assets/976f7eb4-a58d-4e14-aeb4-10d5f182ceb3" />
-<img width="1875" height="861" alt="image" src="https://github.com/user-attachments/assets/ca02b461-7f4e-4943-9975-1d9ada6133d1" />
-
 
 ## Getting Started
 
