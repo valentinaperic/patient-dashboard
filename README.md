@@ -1,6 +1,6 @@
 # Patient Dashboard
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It is a React + TypeScript application for managing patient information with forms, validations, and dynamic status selection. The UI is built using [Material UI (MUI)](https://mui.com/) components.
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It is a React + TypeScript application for managing patient information with forms, validations, and dynamic status selection. The UI is built using [Material UI (MUI)](https://mui.com/) components. It is using firebase for the database.
 
 <img width="1860" height="603" alt="image" src="https://github.com/user-attachments/assets/0697701e-972b-4a80-a393-fa31c4356342" />
 <img width="1860" height="785" alt="image" src="https://github.com/user-attachments/assets/976f7eb4-a58d-4e14-aeb4-10d5f182ceb3" />
