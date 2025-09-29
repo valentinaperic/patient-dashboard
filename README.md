@@ -2,8 +2,6 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It is a React + TypeScript application for managing patient information with forms, validations, and dynamic status selection. The UI is built using [Material UI (MUI)](https://mui.com/) components.
 
----
-
 ## Getting Started
 
 First, clone the repository and install dependencies:
