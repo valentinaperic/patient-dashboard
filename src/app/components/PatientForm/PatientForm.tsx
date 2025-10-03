@@ -27,6 +27,7 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
         lastName: '',
         dob: '',
         status: 'Inquiry',
+        phone: '',
         address: {
             street: '',
             city: '',
@@ -44,6 +45,22 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
+        if (name === 'phone') {
+            //remove non-digit characters
+            const digits = value.replace(/\D/g, '');
+
+            //format as XXX-XXX-XXXX
+            let formatted = digits; 
+            if (digits.length > 3 && digits.length <= 6) {
+                formatted = `${digits.slice(0,3)}-${digits.slice(3)}`;
+            } else if (digits.length > 6) {
+                formatted = `${digits.slice(0,3)}-${digits.slice(3,6)}-${digits.slice(6,10)}`;
+            }
+
+            setForm(f => ({ ...f, phone: formatted }));
+            return;
+        }
+
         if (['street', 'city', 'state', 'zip'].includes(name)) {
             setForm(f => ({
                 ...f,
@@ -55,6 +72,8 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
             setForm(f => ({ ...f, [name]: value }))
         }
     };
+
+
 
     /**
      * validates the form, sends a POST request to create a patient
@@ -75,10 +94,14 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
             return;
         }
 
+        if (!form.phone) {
+            setError('Phone number is required');
+            return;
+        }
+
         setLoading(true);
 
         try {
-            
             const payload = {
                 ...form,
                 middleName: form.middleName || undefined,
@@ -93,7 +116,6 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
             const json = await res.json();
             if (!res.ok) throw new Error(json?.error ?? 'Failed to add patient');
 
-            //success: refresh list and close the form 
             onAdded();
             onClose();
         } catch (err: unknown) {
@@ -107,6 +129,7 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
     return (
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
             {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={4}>
                     <TextField name="firstName" label="First name" value={form.firstName} onChange={handleChange} fullWidth required />
@@ -125,28 +148,21 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
                         value={form.dob}
                         onChange={handleChange}
                         slotProps={{
-                            inputLabel: {
-                            shrink: true,
-                            },
+                            inputLabel: { shrink: true },
                         }}
                         fullWidth
                         required
                     />
                 </Grid>
-                <Grid item xs={12} sm={4}>
-                    <TextField
-                        name="status"
-                        label="Status"
-                        select
-                        value={form.status}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                    >
-                        {STATUS_OPTIONS.map(s => (
-                            <MenuItem key={s} value={s}>{s}</MenuItem>
-                        ))}
-                    </TextField>
+                <Grid item xs={12} sm={6}>
+                    <TextField 
+                        name="phone" 
+                        label="Phone Number" 
+                        value={form.phone} 
+                        onChange={handleChange} 
+                        fullWidth 
+                        required 
+                    />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField name="street" label="Street" value={form.address.street} onChange={handleChange} fullWidth required />
@@ -160,18 +176,33 @@ export default function PatientForm({ onAdded, onClose }: PatientFormProps) {
                 <Grid item xs={12} sm={4}>
                     <TextField name="zip" label="ZIP / Postal code" value={form.address.zip} onChange={handleChange} fullWidth required />
                 </Grid>
-                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-                    <Button onClick={onClose} disabled={loading}>Cancel</Button>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={loading}
-                        startIcon={loading ? <CircularProgress size={16} /> : undefined}
+                <Grid item xs={12} sm={4}>
+                    <TextField
+                        name="status"
+                        label="Status"
+                        select
+                        value={form.status}
+                        onChange={handleChange}
+                        fullWidth
+                        required
                     >
-                        {loading ? 'Saving…' : 'Save Patient'}
-                  </Button>
+                        {STATUS_OPTIONS.map(s => (
+                            <MenuItem key={s} value={s}>{s}</MenuItem>
+                        ))}     
+                    </TextField>
                 </Grid>
             </Grid>
+            <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+                <Button onClick={onClose} disabled={loading}>Cancel</Button>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={loading}
+                    startIcon={loading ? <CircularProgress size={16} /> : undefined}
+                >
+                    {loading ? 'Saving…' : 'Save Patient'}
+                </Button>
+            </Box>
         </Box>
     )
 }

@@ -58,14 +58,18 @@ const PatientList: React.FC = () => {
         //make a copy of the patients array to safely apply filters without mutating state
         let filtered = [...patients];
 
-        //filter by name match (case-insensitive)
-        //TO-DO: filter by all different fields 
         if (search) {
-            filtered = filtered.filter(p =>
-                `${p.firstName} ${p.middleName ?? ''} ${p.lastName}`
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            );
+            filtered = filtered.filter(p => {
+                const fullName = `${p.firstName} ${p.middleName ?? ''} ${p.lastName}`.toLowerCase();
+                const address = `${p.address.street} ${p.address.city} ${p.address.state} ${p.address.zip}`.toLowerCase();
+                const phone = p.phone?.toString() ?? '';
+
+                return (
+                    fullName.includes(search.toLowerCase()) ||
+                    address.includes(search.toLowerCase()) ||
+                    phone.includes(search)
+                );
+            });
         }
 
         //filter by status if a specific status is selected
@@ -125,7 +129,7 @@ const PatientList: React.FC = () => {
             </Box>
             <Box display="flex" gap={2} mb={3} flexWrap="wrap">
                 <TextField
-                    label="Search by name"
+                    label="Search"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     variant="outlined"
@@ -176,6 +180,7 @@ const PatientList: React.FC = () => {
                                         Status {getSortIndicator('status')}
                                     </TableCell>
                                     <TableCell sx={{ fontWeight: 'bold' }}>Address</TableCell>
+                                    <TableCell sx={{ fontWeight: 'bold' }}>Phone Number</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -188,6 +193,7 @@ const PatientList: React.FC = () => {
                                     <TableCell>
                                         {p.address.street}, {p.address.city}, {p.address.state} {p.address.zip}
                                     </TableCell>
+                                    <TableCell>{p.phone}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

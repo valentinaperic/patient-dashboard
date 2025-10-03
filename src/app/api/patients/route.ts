@@ -17,9 +17,9 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { firstName, middleName, lastName, dob, status, address } = body;
+    const { firstName, middleName, lastName, dob, status, address, phone } = body;
 
-    if (!firstName || !lastName || !dob || !address) {
+    if (!firstName || !lastName || !dob || !address || !phone) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       middleName: middleName || null,
       lastName,
       dob,
+      phone,
       status,
       address,
       createdAt: new Date().toISOString(),

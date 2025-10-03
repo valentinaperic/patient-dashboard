@@ -11,6 +11,7 @@ export type Patient = {
   middleName?: string;
   lastName: string;
   dob: string; 
+  phone: string;
   status: Status;
   address: Address;
   createdAt: string; 
